@@ -87,3 +87,8 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Neuron binaries and simulations
+x86_64/
+i686/
+*.out
