@@ -1,2 +1,2 @@
 # tecnet
-neuron prototyping
+neuron prototyping, work in progress
