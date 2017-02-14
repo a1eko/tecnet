@@ -52,8 +52,7 @@ DERIVATIVE state {
 COMMENT
 
 Original model by Huss et al (2007) J Neurophysiol 97:2696-2711.
-
-NEURON implementation by Alexander Kozlov <akozlov@nada.kth.se> after
+NEURON implementation by Alexander Kozlov <akozlov@kth.se> after
 cadyn.mod by Wolf et al (2005).
 
 ENDCOMMENT

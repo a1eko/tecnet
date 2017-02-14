@@ -35,7 +35,6 @@ BREAKPOINT {
 COMMENT
 
 Original model by Huss et al (2007) J Neurophysiol 97:2696-2711.
-
-NEURON implementation by Alexander Kozlov <akozlov@nada.kth.se>.
+NEURON implementation by Alexander Kozlov <akozlov@kth.se>.
 
 ENDCOMMENT
