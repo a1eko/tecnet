@@ -110,12 +110,26 @@ class BallStick(object):
         return nc
 
     def synapses(self):
-        s = h.ExpSyn(self.dend(5./6.))
-        s.tau = 2 +10
+        #s = h.ExpSyn(self.dend(5./6.))
+        #s.tau = 2 +10
+        #self.synlist.append(s)
+        #s = h.ExpSyn(self.dend(1./6.))
+        #s.tau = 5 +20
+        #s.e = -80
+        #self.synlist.append(s)
+        #
+        s = h.GABA(self.dend(1./6.))
+        s.qfact = 1.0
+        s.gbar = 0.005
+        s.Erev = -85
         self.synlist.append(s)
-        s = h.ExpSyn(self.dend(1./6.))
-        s.tau = 5 +20
-        s.e = -80
+        s = h.AMPA(self.dend(5./6.))
+        s.qfact = 1.0
+        s.gbar = 0.005
+        self.synlist.append(s)
+        s = h.NMDA(self.dend(5./6.))
+        s.qfact = 1.0
+        s.gbar = 0.005
         self.synlist.append(s)
 
 
@@ -156,14 +170,23 @@ def test_cell():
 def test_syn():
     precell = BallStick()
     postcell = BallStick()
-    nc = precell.connect2target(postcell.synlist[0]) 	# exc syn
-    #nc = precell.connect2target(postcell.synlist[1]) 	# inh syn
-    nc.weight[0] = 0.01
-    nc.delay = 0
-    stim = h.IClamp(0.5, sec=precell.soma)
-    stim.amp = 0.700
-    stim.delay = 700
-    stim.dur = 1000
+    nc_gaba = precell.connect2target(postcell.synlist[0])
+    nc_gaba.weight[0] = 1
+    nc_gaba.delay = 100
+    nc_ampa = precell.connect2target(postcell.synlist[1])
+    nc_ampa.weight[0] = 1
+    nc_ampa.delay = 500
+    nc_nmda = precell.connect2target(postcell.synlist[2])
+    nc_nmda.weight[0] = 1
+    nc_nmda.delay = 1000
+    stim_pre = h.IClamp(0.5, sec=precell.soma)
+    stim_pre.amp = 0.850
+    stim_pre.delay = 200
+    stim_pre.dur = 200
+    stim_post = h.IClamp(0.5, sec=postcell.soma)
+    stim_post.amp = 0.400
+    stim_post.delay = 0
+    stim_post.dur = 2000
     vec = {}
     for var in 't', 'pre', 'post':
         vec[var] = h.Vector()
@@ -179,6 +202,7 @@ def test_syn():
     with open("vm.out", "w") as out:
         for time, vsoma in zip(vec['t'], vec['post']):
             out.write("%g %g\n" % (time, vsoma))
+        print "PSPs saved to vm.out"
     try:
         import matplotlib.pyplot as plt
         plt.plot(vec['t'], vec['pre'], vec['t'], vec['post'])
@@ -195,8 +219,8 @@ def test_pop():
     for postcell in cells:
         for i in range(20):
             precell = choice(cells)
-            nc = precell.connect2target(postcell.synlist[0])
-            nc.weight[0] = 0.01 *2
+            nc = precell.connect2target(postcell.synlist[1])
+            nc.weight[0] = 5 
             nc.delay = 0
             nclist.append(nc)
     splist = []
@@ -230,6 +254,6 @@ def test_pop():
 
 
 if __name__ == "__main__":
-    test_cell()
-    #test_syn()
+    #test_cell()
+    test_syn()
     #test_pop()
